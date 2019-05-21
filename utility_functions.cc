@@ -131,7 +131,7 @@ double utility::Scintillation_function(double *t, double *par){
 	  triplet_part = 0.25;
 	}
 
-	double Scintillation = exp(-(time/t_singlet))*singlet_part/t_singlet;  + exp(-(time/t_triplet))*triplet_part/t_triplet;
+	double Scintillation = exp(-(time/t_singlet))*singlet_part/t_singlet  + exp(-(time/t_triplet))*triplet_part/t_triplet;
 
 	return Scintillation;
 
