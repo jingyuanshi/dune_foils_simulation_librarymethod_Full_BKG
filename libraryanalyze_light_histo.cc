@@ -277,9 +277,9 @@ int main() {
     ////////////////////////////////////////////////////////////////////////////////////////
     ////////////------------lOADING THE DESIRED OPTICAL LIBRARY------------------///////////
     ////////////////////////////////////////////////////////////////////////////////////////
-    if(config == 0) {libraryfile = "../../dune_withfoils_lib_cleaned.root"; }
-    if(config == 1) {libraryfile = "../../dune_withfoils_lib_cleaned.root"; }          
-    if(config == 2) {libraryfile = "../../dune_withfoils_lib_cleaned.root"; }
+    if(config == 0) {libraryfile = "dune_withfoils_lib_cleaned.root"; }
+    if(config == 1) {libraryfile = "dune_withfoils_lib_cleaned.root"; }          
+    if(config == 2) {libraryfile = "dune_withfoils_lib_cleaned.root"; }
     lar_light.LoadLibraryFromFile(libraryfile, reflected, reflT);
 
 
