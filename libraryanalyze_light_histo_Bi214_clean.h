@@ -39,7 +39,7 @@ bool sort_function(std::pair<double, int> pair1, std::pair<double, int> pair2)
 ///-------------------------------------
 //--------WHAT to generate?-------------
 ///-------------------------------------
-bool fixed_energy = true; double fixedE = 1.46; //MeV
+bool fixed_energy = false; double fixedE = 100.0; //MeV
 bool supernova = false;
 bool solar = false;
 bool gen_argon = false;
@@ -49,7 +49,7 @@ bool gen_Co60G2 = false;
 bool gen_Ar42 = false;
 bool gen_K42 = false;
 bool gen_40KB = false;
-bool gen_40KG = true;
+bool gen_40KG = false;
 bool gen_Kr85B1 = false;
 bool gen_Kr85B2 = false;
 bool gen_Kr85G1 = false;
@@ -57,7 +57,7 @@ bool gen_Kr85G2 = false;
 bool gen_radon = false;
 bool gen_Po218 = false;
 bool gen_Pb214 = false;
-bool gen_Bi214 = false;
+bool gen_Bi214 = true;
 bool gen_Po214 = false;
 bool gen_hep = false;
 bool gen_Po210 = false;
@@ -78,10 +78,8 @@ bool fixed_pos = false;
 
 //double PosMin[3] = {4.77e-1,-600.,0.}; 	//For random_pos option, generate in this range
 //double PosMax[3] = {1.477,600,1395};     //This range is only a plane
-//double PosMin[3] = {10.,-658.,0.};      //For random_pos option, generate in this range
-//double PosMax[3] = {363.,600,1400};     //This range is whole detector
-double PosMin[3] = {3.495e2,-600,0.};   //For random_pos option, generate in this range
-double PosMax[3] = {3.505e2,600,1395};
+double PosMin[3] = {10.,-658.,0.};      //For random_pos option, generate in this range
+double PosMax[3] = {363.,600,1400};     //This range is whole detector
 
 // Middle of the detector
 double fixedX = (PosMax[0]+PosMin[0]) / 2; 	// cm 
@@ -121,7 +119,7 @@ bool reflT;
 //--------------------------------------
 //TTree branches and data products:
 //-------------------------------------
-TFile event_file("event_file_40KG_DUNE_tw1.root", "RECREATE", "Event File");
+TFile event_file("event_file_Bi214_DUNE_tw1_clean.root", "RECREATE", "Event File");
 
 TTree *data_tree = new TTree("data_tree", "data tree");
 TTree *data_tree_vuv = new TTree("data_tree_vuv", "data tree_vuv");
@@ -234,13 +232,14 @@ const int max_events_Ar = activity_Ar * mass * time_window;//FULL volume for 1 T
 const int Ar_decays_per_sec = activity_Ar* mass; // decay rate in one TPC
 
 // Radon events:
-//const int max_events_Rn = 1000000;//To check the Fprompt, you need more Rn events, hope fully it would give you 6000000 photons
-const int max_events_Rn = 5.584e-5 * (PosMax[0]-PosMin[0])*(PosMax[1]-PosMin[1])*(PosMax[2]-PosMin[2]) * time_window;
-const int max_events_Po218 = max_events_Rn;
-const int max_events_Po214 = max_events_Rn;
+//const int max_events_Rn = 10000000;//To check the Fprompt, you need more Rn events, hope fully it would give you 6000000 photons
+const int max_events_Rn = 5.584e-7 * (PosMax[0]-PosMin[0])*(PosMax[1]-PosMin[1])*(PosMax[2]-PosMin[2]) * time_window;//Clean Rn222 after you found that Rn222 is a difficult problem
+//Previously 5.584e-5
+const int max_events_Po218 = max_events_Rn * 0.25;
+const int max_events_Po214 = max_events_Rn * 0.25;
 const int max_events_Po210 = 5e-6 * (PosMax[0]-PosMin[0])*(PosMax[1]-PosMin[1])*(PosMax[2]-PosMin[2]) * time_window;
-const int max_events_Pb214 = max_events_Rn;
-const int max_events_Bi214 = max_events_Rn;
+const int max_events_Pb214 = max_events_Rn * 0.25;
+const int max_events_Bi214 = max_events_Rn * 0.25;
 //const int max_events_Rn = activity_Rn * mass * time_window;//Half volume for 1 (NOTE: for a small time window, this will probably return 0)
 const double Rn_decays_per_sec = activity_Rn* mass; // decay rate in one TPC
 
@@ -249,8 +248,7 @@ const int max_events_SN = time_frames;
 //int max_events_SN = utility::poisson(expected_sn,gRandom->Uniform(1.),1.);
 
 // Solar neutrino events:
-//const int max_events_SO = 500;
-const int max_events_SO = 1000000;
+ const int max_events_SO = 1;
 //int max_events_SO = utility::poisson(expected_sn,gRandom->Uniform(1.),1.);
 
 const int max_events_Co60B = 8.2e-5 * (PosMax[0]-PosMin[0])*(PosMax[1]-PosMin[1])*(PosMax[2]-PosMin[2]) * time_window;//For beta decay, near 100% would have beta decay and 200% gamma decay

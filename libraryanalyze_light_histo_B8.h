@@ -39,9 +39,9 @@ bool sort_function(std::pair<double, int> pair1, std::pair<double, int> pair2)
 ///-------------------------------------
 //--------WHAT to generate?-------------
 ///-------------------------------------
-bool fixed_energy = true; double fixedE = 1.46; //MeV
+bool fixed_energy = false; double fixedE = 100.0; //MeV
 bool supernova = false;
-bool solar = false;
+bool solar = true;
 bool gen_argon = false;
 bool gen_Co60B = false;
 bool gen_Co60G1 = false;
@@ -49,7 +49,7 @@ bool gen_Co60G2 = false;
 bool gen_Ar42 = false;
 bool gen_K42 = false;
 bool gen_40KB = false;
-bool gen_40KG = true;
+bool gen_40KG = false;
 bool gen_Kr85B1 = false;
 bool gen_Kr85B2 = false;
 bool gen_Kr85G1 = false;
@@ -78,10 +78,8 @@ bool fixed_pos = false;
 
 //double PosMin[3] = {4.77e-1,-600.,0.}; 	//For random_pos option, generate in this range
 //double PosMax[3] = {1.477,600,1395};     //This range is only a plane
-//double PosMin[3] = {10.,-658.,0.};      //For random_pos option, generate in this range
-//double PosMax[3] = {363.,600,1400};     //This range is whole detector
-double PosMin[3] = {3.495e2,-600,0.};   //For random_pos option, generate in this range
-double PosMax[3] = {3.505e2,600,1395};
+double PosMin[3] = {10.,-658.,0.};      //For random_pos option, generate in this range
+double PosMax[3] = {363.,600,1400};     //This range is whole detector
 
 // Middle of the detector
 double fixedX = (PosMax[0]+PosMin[0]) / 2; 	// cm 
@@ -121,7 +119,7 @@ bool reflT;
 //--------------------------------------
 //TTree branches and data products:
 //-------------------------------------
-TFile event_file("event_file_40KG_DUNE_tw1.root", "RECREATE", "Event File");
+TFile event_file("event_file_Solar_DUNE_tw1.root", "RECREATE", "Event File");
 
 TTree *data_tree = new TTree("data_tree", "data tree");
 TTree *data_tree_vuv = new TTree("data_tree_vuv", "data tree_vuv");
@@ -249,8 +247,8 @@ const int max_events_SN = time_frames;
 //int max_events_SN = utility::poisson(expected_sn,gRandom->Uniform(1.),1.);
 
 // Solar neutrino events:
-//const int max_events_SO = 500;
-const int max_events_SO = 1000000;
+const int max_events_SO = 500;
+//const int max_events_SO = 1000000;
 //int max_events_SO = utility::poisson(expected_sn,gRandom->Uniform(1.),1.);
 
 const int max_events_Co60B = 8.2e-5 * (PosMax[0]-PosMin[0])*(PosMax[1]-PosMin[1])*(PosMax[2]-PosMin[2]) * time_window;//For beta decay, near 100% would have beta decay and 200% gamma decay

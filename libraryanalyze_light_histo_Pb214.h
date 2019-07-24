@@ -59,6 +59,8 @@ bool gen_Po218 = false;
 bool gen_Pb214 = true;
 bool gen_Bi214 = false;
 bool gen_Po214 = false;
+bool gen_hep = false;
+bool gen_Po210 = false; 
 ///-------------------------------------
 ///-------------------------------------
 ///-------DO timing calculations?-------
@@ -198,6 +200,7 @@ const double massAlpha = 3727.3794; 	// alpha particle mass - MeV/c^2
 const double Q_Rn = 5.590; 				// deposited energy from a radon decay - Rn-222 --> Po-218
 const double Q_Po218 = 6.0;
 const double Q_Po214 = 7.7;
+const double Q_Po210 = 5.3;
 ///-------------------------------------
 
 ///-------------------------------------
@@ -229,11 +232,13 @@ const int max_events_Ar = activity_Ar * mass * time_window;//FULL volume for 1 T
 const int Ar_decays_per_sec = activity_Ar* mass; // decay rate in one TPC
 
 // Radon events:
+//const int max_events_Rn = 1000000;//To check the Fprompt, you need more Rn events, hope fully it would give you 6000000 photons
 const int max_events_Rn = 5.584e-5 * (PosMax[0]-PosMin[0])*(PosMax[1]-PosMin[1])*(PosMax[2]-PosMin[2]) * time_window;
-const int max_events_Po218 = max_events_Rn;
-const int max_events_Po214 = max_events_Rn;
-const int max_events_Pb214 = max_events_Rn;
-const int max_events_Bi214 = max_events_Rn;
+const int max_events_Po218 = max_events_Rn * 0.25;
+const int max_events_Po214 = max_events_Rn * 0.25;
+const int max_events_Po210 = 5e-6 * (PosMax[0]-PosMin[0])*(PosMax[1]-PosMin[1])*(PosMax[2]-PosMin[2]) * time_window;
+const int max_events_Pb214 = max_events_Rn * 0.25;
+const int max_events_Bi214 = max_events_Rn * 0.25;
 //const int max_events_Rn = activity_Rn * mass * time_window;//Half volume for 1 (NOTE: for a small time window, this will probably return 0)
 const double Rn_decays_per_sec = activity_Rn* mass; // decay rate in one TPC
 
@@ -242,7 +247,8 @@ const int max_events_SN = time_frames;
 //int max_events_SN = utility::poisson(expected_sn,gRandom->Uniform(1.),1.);
 
 // Solar neutrino events:
- const int max_events_SO = 1;
+const int max_events_SO = 500;
+//const int max_events_SO = 1000000;
 //int max_events_SO = utility::poisson(expected_sn,gRandom->Uniform(1.),1.);
 
 const int max_events_Co60B = 8.2e-5 * (PosMax[0]-PosMin[0])*(PosMax[1]-PosMin[1])*(PosMax[2]-PosMin[2]) * time_window;//For beta decay, near 100% would have beta decay and 200% gamma decay
@@ -256,6 +262,7 @@ const int max_events_Kr85B1 = 1.6e-4 * (PosMax[0]-PosMin[0])*(PosMax[1]-PosMin[1
 const int max_events_Kr85B2 = 1.6e-4 * (PosMax[0]-PosMin[0])*(PosMax[1]-PosMin[1])*(PosMax[2]-PosMin[2]) * time_window * 0.14;
 const int max_events_Kr85G1 = 1.6e-4 * (PosMax[0]-PosMin[0])*(PosMax[1]-PosMin[1])*(PosMax[2]-PosMin[2]) * time_window * 0.785 * 0.752;
 const int max_events_Kr85G2 = max_events_Kr85B2;
+const int max_events_hep = 100;
 
 //--------------------------------------
 //--------------------------------------

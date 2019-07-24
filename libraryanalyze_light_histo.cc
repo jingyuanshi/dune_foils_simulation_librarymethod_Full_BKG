@@ -38,22 +38,21 @@ int main() {
     TF1 *fSpectrum = new TF1("fSpectrum",utility::SpectrumFunction,0,Q_beta_endpoint,1);//-----Beta decay spectrum
     TF1 *flandau_sn = new TF1("flandau_sn",utility::fsn, 0, 50, 1);//--SN Nu spectrum
     TF1 *flandau_so = new TF1("flandau_so",utility::fso, 0, 16.56, 1); // Solar neutrino spectrum
+    TF1 *flandau_hep = new TF1("flandau_hep",utility::fhep, 0, 18.78, 1); // hep solar  neutrino spectrum
     //fSpectrum->SetParameter(0, Q_Ar);//Not so fast
     flandau_sn->SetParameter(0, Eav);
     flandau_so->SetParameter(0, Eav);
+    flandau_hep->SetParameter(0, Eav);
 
     TRandom3 *fGauss = new TRandom3();
     
     TF1 *fScintillation_function = new TF1("Scintillation Timing", utility::Scintillation_function, 0, scint_time_window, 3); 
     fScintillation_function->SetParameter(0, t_singlet); 
     fScintillation_function->SetParameter(1, t_triplet);    // t_singlet and t_triplet are defined in the header file (libraryanalyze_light_histo.h)
-    if(gen_argon == true || fixed_energy == true || supernova == true || solar == true){ //i.e. an electron is the ionising particle
-        fScintillation_function->FixParameter(2, 0); 
-    }
-    if(gen_radon == true){fScintillation_function->FixParameter(2, 1);} // i.e. an alpha particle is the ionising particle
-    if(gen_Po218 == true){fScintillation_function->FixParameter(2, 1);}
-    if(gen_Po214 == true){fScintillation_function->FixParameter(2, 1);}
-    if(gen_Po210 == true){fScintillation_function->FixParameter(2, 1);}
+    //if(gen_argon == true || fixed_energy == true || supernova == true || solar == true || gen_hep ==true){ //i.e. an electron is the ionising particle
+    fScintillation_function->FixParameter(2, 0); //Default generating electron
+    //}
+    if(gen_radon == true || gen_Po210 == true){fScintillation_function->FixParameter(2, 1);cout<<"Parameters fixed to alpha scintillation"<<endl;} // i.e. an alpha particle is the ionising particle
     // the 3rd parameter is the type of particle 0 = electron, 1 = alpha (sets the ratio of the fast and slow components - see utility_functions.cc)
 
 
@@ -67,6 +66,7 @@ int main() {
 /*    if(gen_Co60G1 == true) {max_events_FE = max_events_Co60G1;}
     if(gen_Co60G2 == true) {max_events_FE = max_events_Co60G2;}
     if(gen_40KG == true) {max_events_FE = max_events_40KG;}
+//        double Eav = par[0];
 */
     // OUTPUT what is being simulationed
     if(fixed_energy == true) {
@@ -75,8 +75,6 @@ int main() {
         if(gen_Co60G1 == true) {max_events = max_events_Co60G1;}
         if(gen_Co60G2 == true) {max_events = max_events_Co60G2;}
         if(gen_40KG == true) {max_events = max_events_40KG;}
-        if(gen_Kr85G1 == true) {max_events = max_events_Kr85G1;}
-        if(gen_Kr85G2 == true) {max_events = max_events_Kr85G2;}
 
         scint_yield = scint_yield_electron;
         particle = "electron";
@@ -115,17 +113,6 @@ int main() {
         /*cout << "***NOTE. In ONE TPC, We expect to see: " << Ar_decays_per_sec << " Ar 39 decays each second.***" << endl;*/
         cout << "//////////////////////////////////////////////////////////////////////////////" << endl << endl;
     }
-    if(gen_K42 == true) {
-       fSpectrum->SetParameter(0, Q_K42);//Setting the endpoint to Ar39 beta decay endpoint 
-        max_events = max_events_K42;
-        scint_yield = scint_yield_electron;
-        particle = "electron";
-        cout << endl << "Generating " << max_events << ", K42 beta decays in time window: " << time_window << " seconds." << endl;
-        cout << "This is equal to " << time_frames << " PMT readout frames." << endl;
-        cout << endl << "/////////////////////////////////////////////////////////////////////////////" << endl;
-        /*cout << "***NOTE. In ONE TPC, We expect to see: " << Ar_decays_per_sec << " Ar 39 decays each second.***" << endl;*/
-        cout << "//////////////////////////////////////////////////////////////////////////////" << endl << endl;
-    }
     if(gen_40KB == true) {
        fSpectrum->SetParameter(0, Q_40KB);//Setting the endpoint to Ar39 beta decay endpoint 
         max_events = max_events_40KB;
@@ -159,28 +146,6 @@ int main() {
         /*cout << "***NOTE. In ONE TPC, We expect to see: " << Ar_decays_per_sec << " Ar 39 decays each second.***" << endl;*/
         cout << "//////////////////////////////////////////////////////////////////////////////" << endl << endl;
     }
-    if(gen_Pb214 == true) {
-       fSpectrum->SetParameter(0, Q_Pb214);//Setting the endpoint to Ar39 beta decay endpoint 
-        max_events = max_events_Pb214;
-        scint_yield = scint_yield_electron;
-        particle = "electron";
-        cout << endl << "Generating " << max_events << ", Pb214 beta decays in time window: " << time_window << " seconds." << endl;
-        cout << "This is equal to " << time_frames << " PMT readout frames." << endl;
-        cout << endl << "/////////////////////////////////////////////////////////////////////////////" << endl;
-        /*cout << "***NOTE. In ONE TPC, We expect to see: " << Ar_decays_per_sec << " Ar 39 decays each second.***" << endl;*/
-        cout << "//////////////////////////////////////////////////////////////////////////////" << endl << endl;
-    }
-    if(gen_Bi214 == true) {
-       fSpectrum->SetParameter(0, Q_Bi214);//Setting the endpoint to Ar39 beta decay endpoint 
-        max_events = max_events_Bi214;
-        scint_yield = scint_yield_electron;
-        particle = "electron";
-        cout << endl << "Generating " << max_events << ", Bi214 beta decays in time window: " << time_window << " seconds." << endl;
-        cout << "This is equal to " << time_frames << " PMT readout frames." << endl;
-        cout << endl << "/////////////////////////////////////////////////////////////////////////////" << endl;
-        /*cout << "***NOTE. In ONE TPC, We expect to see: " << Ar_decays_per_sec << " Ar 39 decays each second.***" << endl;*/
-        cout << "//////////////////////////////////////////////////////////////////////////////" << endl << endl;
-    }
     if(supernova == true){
         max_events = max_events_SN;
         scint_yield = scint_yield_electron;
@@ -193,6 +158,33 @@ int main() {
         particle = "electron";
         cout << "\nGenerating " << max_events << ", solar events.\n";
     }
+    if(gen_Pb214 == true){
+        fSpectrum->SetParameter(0, Q_Pb214);//Setting the endpoint to Ar39 beta decay endpoint
+        max_events = max_events_Pb214;
+        scint_yield = scint_yield_electron;
+        particle = "electron";
+        cout << "\nGenerating " << max_events << ", Pb214 events.\n";
+    }
+    if(gen_Bi214 == true){
+        fSpectrum->SetParameter(0, Q_Bi214);//Setting the endpoint to Ar39 beta decay endpoint
+        max_events = max_events_Bi214;
+        scint_yield = scint_yield_electron;
+        particle = "electron";
+        cout << "\nGenerating " << max_events << ", Bi214 events.\n";
+    }
+    if(gen_K42 == true){
+        fSpectrum->SetParameter(0, Q_K42);//Setting the endpoint to Ar39 beta decay endpoint
+        max_events = max_events_K42;
+        scint_yield = scint_yield_electron;
+        particle = "electron";
+        cout << "\nGenerating " << max_events << ", K42 events.\n";
+    }
+    if(gen_hep == true){
+        max_events = max_events_hep;
+        scint_yield = scint_yield_electron;
+        particle = "electron";
+        cout << "\nGenerating " << max_events << ", hep events.\n";
+    }
     if(gen_radon == true){ //gen_radon == true
         max_events = max_events_Rn;
         scint_yield = scint_yield_alpha;
@@ -203,35 +195,11 @@ int main() {
         cout << "***NOTE. In ONE TPC, we expect to see: " << Rn_decays_per_sec << " radon-222 decays each second.***" << endl;
         cout << "/////////////////////////////////////////////////////////////////////////////" << endl << endl;
     }
-    if(gen_Po218 == true){ //gen_Po218 == true
-        max_events = max_events_Po218;
-        scint_yield = scint_yield_alpha;
-        particle = "alpha";
-        cout << "\nGenerating " << max_events << ", Po 218 decays in time window: " << time_window << " seconds." << endl;
-        cout << "This is equal to " << time_frames << " PMT readout frames." << endl;
-        cout << endl << "/////////////////////////////////////////////////////////////////////////////" << endl;
-        cout << "***NOTE. In ONE TPC, we expect to see: " << Rn_decays_per_sec << " Po218 decays each second.***" << endl;
-        cout << "/////////////////////////////////////////////////////////////////////////////" << endl << endl;
-    }
-    if(gen_Po214 == true){ //gen_Po214 == true
-        max_events = max_events_Po214;
-        scint_yield = scint_yield_alpha;
-        particle = "alpha";
-        cout << "\nGenerating " << max_events << ", Po 214 decays in time window: " << time_window << " seconds." << endl;
-        cout << "This is equal to " << time_frames << " PMT readout frames." << endl;
-        cout << endl << "/////////////////////////////////////////////////////////////////////////////" << endl;
-        cout << "***NOTE. In ONE TPC, we expect to see: " << Rn_decays_per_sec << " Po214 decays each second.***" << endl;
-        cout << "/////////////////////////////////////////////////////////////////////////////" << endl << endl;
-    }
-    if(gen_Po210 == true){ //gen_Po210 == true
+    if(gen_Po210 == true){ //gen_radon == true
         max_events = max_events_Po210;
         scint_yield = scint_yield_alpha;
         particle = "alpha";
-        cout << "\nGenerating " << max_events << ", Po 214 decays in time window: " << time_window << " seconds." << endl;
-        cout << "This is equal to " << time_frames << " PMT readout frames." << endl;
-        cout << endl << "/////////////////////////////////////////////////////////////////////////////" << endl;
-        cout << "***NOTE. In ONE TPC, we expect to see: " << Rn_decays_per_sec << " Po210 decays each second.***" << endl;
-        cout << "/////////////////////////////////////////////////////////////////////////////" << endl << endl;
+        cout << "\nGenerating " << max_events << ", Po210 decays in time window: " << time_window << " seconds." << endl;
     }
 
     // OUTPUT the foil configuration chosen
@@ -372,18 +340,18 @@ int main() {
         if(gen_argon == true) {energy = fSpectrum->GetRandom();}    // pull from the Ar beta spectrum (see utility_functions.cc)
         if(gen_Ar42 == true) {energy = fSpectrum->GetRandom();}
         if(gen_K42 == true) {energy = fSpectrum->GetRandom();}
+        if(gen_Bi214 == true) {energy = fSpectrum->GetRandom();}
+        if(gen_Pb214 == true) {energy = fSpectrum->GetRandom();}
         if(gen_Co60B == true) {energy = fSpectrum->GetRandom();}
         if(gen_40KB == true) {energy = fSpectrum->GetRandom();}
         if(gen_Kr85B1 == true) {energy = fSpectrum->GetRandom();}
         if(gen_Kr85B2 == true) {energy = fSpectrum->GetRandom();}
         if(supernova == true) {energy = flandau_sn->GetRandom();}   // Pull from the predicted SN spectrum (see utility_functions.cc)
         if(solar == true) {energy = flandau_so->GetRandom();}	// pull from predicted solar neutrino spectrum
-        if(gen_Pb214 == true) {energy = fSpectrum->GetRandom();}
-        if(gen_Bi214 == true) {energy = fSpectrum->GetRandom();}
+        if(gen_hep == true) {energy = flandau_hep->GetRandom();}
         if(gen_radon == true) {energy = fGauss->Gaus(Q_Rn, 0.05);}  // Gaus(av,sigma) - is a ROOT function, pulls from a Gaussian
-        if(gen_Po218 == true) {energy = fGauss->Gaus(Q_Po218, 0.05);}
-        if(gen_Po214 == true) {energy = fGauss->Gaus(Q_Po214, 0.05);}
         if(gen_Po210 == true) {energy = fGauss->Gaus(Q_Po210, 0.05);}
+         
 
         // DETERMINE THE POSITION OF THE VOXEL IN WHICH THE EVENT OCCURRED & THE VOXEL NUMBER 
         vector<double> position(3); //creates an empty vector of length 3
@@ -433,15 +401,12 @@ int main() {
 		
 		// Generate event in the middle of the time frame
 		decay_time = frame_time * (event + 0.5);
-		}
+             }
 	     // if event is a background decay->spread it over the time window
 	     else{
 		decay_time =  gRandom->Uniform(0,time_window); // selects a random time of the event to decay within the specified time window
-		}
+	     }
 
-             if(solar == true ){
-                decay_time = gRandom->Uniform(0,time_window);
-             }
 	     decay_time_list.push_back(decay_time); 
 	}
 

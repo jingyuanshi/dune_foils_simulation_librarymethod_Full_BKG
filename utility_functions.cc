@@ -92,6 +92,20 @@ double utility::fso(double *x, double *par)
 
 }
 
+double utility::fhep(double *x, double *par)
+{
+
+        double E = *x;
+        double Eav = par[0];
+        TFile *f1 = new TFile("hep_neu_energy_spline.root");
+        TSpline3 *spline = (TSpline3*)f1->Get("Spline3");
+        double f_hep_neu = spline->Eval(E);
+        f1->Close();
+
+        return f_hep_neu;
+
+}
+
 //Radon-222 decay energy spectrum (Gaussian about the alpha decay energy)
 
 double utility::Rn_function(double *x, double *par)
