@@ -83,7 +83,7 @@ double utility::fso(double *x, double *par)
 //Spline3//
 ///////////
 
-        TFile *f = new TFile("../../solar_neu_energy_spline.root");
+        TFile *f = new TFile("solar_neu_energy_spline.root");
         TSpline3 *spline = (TSpline3*)f->Get("Spline3");
         double f_s_neu = spline->Eval(E);
         f->Close();
